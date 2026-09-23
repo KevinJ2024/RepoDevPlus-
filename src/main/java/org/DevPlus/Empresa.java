@@ -61,7 +61,7 @@ public class Empresa {
                 case 0:
                     break;
                 default:
-                    JOptionPane.showMessageDialog(null, "Porfavor ingrese un numero valido");
+                    JOptionPane.showMessageDialog(null, "Ingrese una opcion valida");
             }
 
         } while (option != 0);
@@ -74,21 +74,89 @@ public class Empresa {
                         "\n 1. Registrar Cliente" +
                         "\n 2. Consultar por telefono" +
                         "\n 0. Regresar"));
+
+        switch (option) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 0:
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Ingrese una opcion valida");
+        }
     }
 
     public static void menuDesarrolladores() {
+        int option = Integer.parseInt(JOptionPane.showInputDialog(
+                "Menu Desarrolladores" +
+                        "\n 1. Registrar Desarrollador" +
+                        "\n 0. Regresar"));
 
+        switch (option) {
+            case 1:
+                break;
+            case 0:
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Ingrese una opcion valida");
+        }
     }
 
     public static void menuProyectos() {
+        int option = Integer.parseInt(JOptionPane.showInputDialog(
+                "Menu Proyectos" +
+                        "\n 1. Registrar Proyecto" +
+                        "\n 2. Consultar Proyecto" +
+                        "\n 3. Actualizar Proyecto" +
+                        "\n 4. Eliminar Proyecto" +
+                        "\n 0. Regresar"));
 
+        switch (option) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 0:
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Ingrese una opcion valida");
+        }
     }
 
     public static void menuServicios() {
+        int option = Integer.parseInt(JOptionPane.showInputDialog(
+                "Menu Servicios" +
+                        "\n 1. Registrar Servicio" +
+                        "\n 0. Regresar"));
 
+        switch (option) {
+            case 1:
+                break;
+            case 0:
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Ingrese una opcion valida");
+        }
     }
 
     public static void menuEstadisticas() {
+        int option = Integer.parseInt(JOptionPane.showInputDialog(
+                "Menu Estadisticas" +
+                        "\n 1. Consultar Ingresos" +
+                        "\n 0. Regresar"));
 
+        switch (option) {
+            case 1:
+                break;
+            case 0:
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Ingrese una opcion valida");
+        }
     }
 }
