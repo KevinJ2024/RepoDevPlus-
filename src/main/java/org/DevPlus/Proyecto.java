@@ -42,6 +42,8 @@ public class Proyecto {
 
     }
 
+    //GETTERS Y SETTERS ----------
+
     public String getCodigo() {
         return codigo;
     }

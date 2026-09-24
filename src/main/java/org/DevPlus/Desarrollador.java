@@ -9,14 +9,14 @@ public class Desarrollador {
     private int cantMaxProyectos;
     private double tarifaDia;
     private String estado;
-    private boolean disponibilidad;
+    private String disponibilidad;
 
     private AsignacionDesarrollador[] listAsigDesarrolladores;
 
     public Desarrollador(String id, String nombreCompleto,
                          String equipoTrabajo, String nivel,
                          int cantMaxProyectos, double tarifaDia,
-                         String estado, boolean disponibilidad) {
+                         String estado, String disponibilidad) {
         this.id = id;
         this.nombreCompleto = nombreCompleto;
         this.equipoTrabajo = equipoTrabajo;
@@ -32,6 +32,8 @@ public class Desarrollador {
     public void actualizarDisponibilidad(boolean nuevaDisponibilidad) {
 
     }
+
+    //GETTERS Y SETTERS ----------
 
     public String getId() {
         return id;
@@ -89,11 +91,11 @@ public class Desarrollador {
         this.estado = estado;
     }
 
-    public boolean isDisponibilidad() {
+    public String isDisponibilidad() {
         return disponibilidad;
     }
 
-    public void setDisponibilidad(boolean disponibilidad) {
+    public void setDisponibilidad(String disponibilidad) {
         this.disponibilidad = disponibilidad;
     }
 

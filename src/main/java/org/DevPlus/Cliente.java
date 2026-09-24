@@ -5,12 +5,12 @@ public class Cliente {
     private String id;
     private String nombreCompleto;
     private String razonSocial;
-    private int telefono; //tipo entero porque se usa luego para operaciones
+    private long telefono; //tipo entero porque se usa luego para operaciones
     private String correo;
     private String paisProcedencia;
 
     public Cliente(String id, String nombreCompleto,
-                   String razonSocial, int telefono,
+                   String razonSocial, long telefono,
                    String correo, String paisProcedencia) {
         this.id = id;
         this.nombreCompleto = nombreCompleto;
@@ -26,7 +26,7 @@ public class Cliente {
 
         if(this.telefono != 0) {
 
-            int suma = sumarDivisores();
+            long suma = sumarDivisores();
 
             if (suma == this.telefono){
                 esPerfecto = true;
@@ -36,9 +36,9 @@ public class Cliente {
         return esPerfecto;
     }
 
-    private int sumarDivisores(){
-        int acumulador = 1; // el 1 es divisor de todos
-        for (int i = 2; i*i <= this.telefono; i++){
+    private long sumarDivisores(){
+        long acumulador = 1; // el 1 es divisor de todos
+        for (long i = 2; i*i <= this.telefono; i++){
             if (this.telefono % i == 0) {
                 acumulador += i;
 
@@ -50,6 +50,8 @@ public class Cliente {
 
         return acumulador;
     }
+
+    //GETTERS Y SETTERS ----------
 
     public String getId() {
         return id;
@@ -75,11 +77,11 @@ public class Cliente {
         this.razonSocial = razonSocial;
     }
 
-    public int getTelefono() {
+    public long getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(long telefono) {
         this.telefono = telefono;
     }
 

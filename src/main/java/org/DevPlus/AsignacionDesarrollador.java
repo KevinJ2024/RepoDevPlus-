@@ -15,6 +15,7 @@ public class AsignacionDesarrollador {
     }
 
 
+    //GETTERS Y SETTERS ----------
 
     public LocalDate getFechaAsignacion() {
         return fechaAsignacion;

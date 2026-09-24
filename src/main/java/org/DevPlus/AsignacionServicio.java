@@ -14,6 +14,7 @@ public class AsignacionServicio {
         theProyecto = null;
     }
 
+    //GETTERS Y SETTERS ----------
 
     public LocalDate getFechaAsignacion() {
         return fechaAsignacion;

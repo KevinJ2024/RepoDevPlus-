@@ -1,0 +1,172 @@
+package org.DevPlus;
+
+import javax.swing.*;
+
+public class Main {
+    static Empresa devPlus = new Empresa("1234", "DevPlus",
+            "aa", "123456",
+            "https://");
+
+    public static void main(String[] args) {
+        int option = 0;
+        do {
+            option = Integer.parseInt(JOptionPane.showInputDialog(
+                    "MENU DevPlus " +
+                            "\n 1. Menu de Clientes" +
+                            "\n 2. Menu de Desarrolladores" +
+                            "\n 3. Menu de Proyectos" +
+                            "\n 4. Menu de Servicios" +
+                            "\n 5. Menu de Estadisticas" +
+                            "\n 0. Salir del sistema"));
+
+            switch (option) {
+                case 1:
+                    menuClientes();
+                    break;
+                case 2:
+                    menuDesarrolladores();
+                    break;
+                case 3:
+                    menuProyectos();
+                    break;
+                case 4:
+                    menuServicios();
+                    break;
+                case 5:
+                    menuEstadisticas();
+                    break;
+                case 0:
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Ingrese una opcion valida");
+            }
+
+        } while (option != 0);
+
+    }
+
+    public static void menuClientes() {
+        int option = Integer.parseInt(JOptionPane.showInputDialog(
+                "Menu Clientes" +
+                        "\n 1. Registrar Cliente" +
+                        "\n 2. Consultar por telefono" +
+                        "\n 0. Regresar"));
+
+        switch (option) {
+            case 1:
+                Cliente datos = devPlus.ingresarDatosRegistroCliente();
+                boolean res = devPlus.registrarCliente(datos);
+
+                if (res == true) {
+                    JOptionPane.showMessageDialog(null, "Se registro exitosamente el cliente");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo guardar el cliente");
+                }
+                break;
+            case 2:
+                long telefonoConsultado = devPlus.ingresarTelefonoCliente();
+                Cliente clienteEncontrado = devPlus.consultarClienteTelefono(telefonoConsultado);
+                if (clienteEncontrado != null) {
+                    devPlus.imprimirResultadoConsultaCliente(clienteEncontrado);
+                } else {
+                    JOptionPane.showMessageDialog(null, "El cliente no existe o no pudo ser encontrado");
+                }
+                break;
+            case 0:
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Ingrese una opcion valida");
+        }
+    }
+
+    public static void menuDesarrolladores() {
+        int option = Integer.parseInt(JOptionPane.showInputDialog(
+                "Menu Desarrolladores" +
+                        "\n 1. Registrar Desarrollador" +
+                        "\n 0. Regresar"));
+
+        switch (option) {
+            case 1:
+                Desarrollador datos = devPlus.ingresarDatosRegistroDesarrollador();
+                boolean res = devPlus.registrarDesarrollador(datos);
+
+                if (res == true) {
+                    JOptionPane.showMessageDialog(null, "Se registro exitosamente el desarrollador");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo guardar el desarrollador");
+                }
+                break;
+            case 0:
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Ingrese una opcion valida");
+        }
+    }
+
+    public static void menuProyectos() {
+        int option = Integer.parseInt(JOptionPane.showInputDialog(
+                "Menu Proyectos" +
+                        "\n 1. Registrar Proyecto" +
+                        "\n 2. Consultar Proyecto" +
+                        "\n 3. Actualizar Proyecto" +
+                        "\n 4. Eliminar Proyecto" +
+                        "\n 0. Regresar"));
+
+        switch (option) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 0:
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Ingrese una opcion valida");
+        }
+    }
+
+    public static void menuServicios() {
+        int option = Integer.parseInt(JOptionPane.showInputDialog(
+                "Menu Servicios" +
+                        "\n 1. Registrar Servicio" +
+                        "\n 0. Regresar"));
+
+        switch (option) {
+            case 1:
+                Servicio datos = devPlus.ingresarDatosRegistroServicio();
+                boolean res = devPlus.registrarServicio(datos);
+
+                if (res == true) {
+                    JOptionPane.showMessageDialog(null, "Se registro exitosamente el servicio");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo guardar el servicio");
+                }
+                break;
+            case 0:
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Ingrese una opcion valida");
+        }
+    }
+
+    public static void menuEstadisticas() {
+        int option = Integer.parseInt(JOptionPane.showInputDialog(
+                "Menu Estadisticas" +
+                        "\n 1. Consultar Ingresos" +
+                        "\n 0. Regresar"));
+
+        switch (option) {
+            case 1:
+                break;
+            case 0:
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Ingrese una opcion valida");
+        }
+    }
+
+
+}

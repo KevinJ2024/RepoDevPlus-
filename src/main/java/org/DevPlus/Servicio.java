@@ -5,13 +5,13 @@ public class Servicio {
     private String nombreServicio;
     private String descripcion;
     private double precio;
-    private boolean disponibilidad;
+    private String disponibilidad;
 
     private AsignacionServicio[] listAsigServicios;
 
     public Servicio(String codigo, String nombreServicio,
                     String descripcion, double precio,
-                    boolean disponibilidad) {
+                    String disponibilidad) {
         this.codigo = codigo;
         this.nombreServicio = nombreServicio;
         this.descripcion = descripcion;
@@ -22,6 +22,7 @@ public class Servicio {
     }
 
 
+    //GETTERS Y SETTERS ----------
 
     public String getCodigo() {
         return codigo;
@@ -55,11 +56,11 @@ public class Servicio {
         this.precio = precio;
     }
 
-    public boolean isDisponibilidad() {
+    public String isDisponibilidad() {
         return disponibilidad;
     }
 
-    public void setDisponibilidad(boolean disponibilidad) {
+    public void setDisponibilidad(String disponibilidad) {
         this.disponibilidad = disponibilidad;
     }
 
