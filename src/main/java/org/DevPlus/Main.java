@@ -1,6 +1,7 @@
 package org.DevPlus;
 
 import javax.swing.*;
+import java.time.LocalDate;
 
 public class Main {
     static Empresa devPlus = new Empresa("1234", "DevPlus",
@@ -138,8 +139,10 @@ public class Main {
                 Proyecto proyectoActualizar = devPlus.consultarProyectoCodigo(codigoProyectoActualizar);
                 Proyecto datosActualizar = devPlus.ingresarDatosActualizarProyecto(proyectoActualizar);
 
-                if(devPlus.actualizarProyecto(codigoProyectoActualizar, datosActualizar)){
-
+                if (devPlus.actualizarProyecto(codigoProyectoActualizar, datosActualizar)) {
+                    JOptionPane.showMessageDialog(null, "Se actualizo exitosamente el proyecto");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo actualizar el proyecto");
                 }
                 break;
             case 4:
@@ -151,7 +154,7 @@ public class Main {
 
                 if (proyectoAnadirDev.agregarDesarrollador(desarrolladorEncontradoAnadir)) {
                     JOptionPane.showMessageDialog(null, "Se añadio correctamente el desarrollador al proyecto");
-                }else {
+                } else {
                     JOptionPane.showMessageDialog(null, "No se pudo añadir al desarrollador al proyecto");
                 }
                 break;
@@ -164,7 +167,7 @@ public class Main {
 
                 if (proyectoAnadirServicio.agregarServicio(servicioEncontradoAnadir)) {
                     JOptionPane.showMessageDialog(null, "Se añadio correctamente el servicio al proyecto");
-                }else {
+                } else {
                     JOptionPane.showMessageDialog(null, "No se pudo añadir el servicio al proyecto");
                 }
                 break;
@@ -207,6 +210,12 @@ public class Main {
 
         switch (option) {
             case 1:
+                LocalDate fechaSolicitudIngresos = devPlus.ingresarFechaSolicitudIngresos();
+
+                double ingresos = devPlus.calcularIngresosEmpresa(fechaSolicitudIngresos);
+                JOptionPane.showMessageDialog(null, "Los ingresos de la empresa por los proyectos con fecha solicitud de" +
+                        "\n" + fechaSolicitudIngresos +
+                        "\n fueron de: " + ingresos);
                 break;
             case 0:
                 break;

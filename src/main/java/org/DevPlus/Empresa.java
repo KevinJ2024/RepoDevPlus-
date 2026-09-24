@@ -106,12 +106,10 @@ public class Empresa {
         String id = JOptionPane.showInputDialog("Ingrese el ID del desarrollador: ");
         String nombreCompleto = JOptionPane.showInputDialog("Ingrese el nombre completo del desarrollador: ");
         String equipoTrabajo = JOptionPane.showInputDialog("Ingrese el equipo de trabajo del desarrollador");
-        String nivel = JOptionPane.showInputDialog("Ingrese el nivel del desarrollador" +
-                "\n Junior, Semisenior, Senior");
+        String nivel = JOptionPane.showInputDialog("Ingrese el nivel del desarrollador" + "\n Junior, Semisenior, Senior");
         int cantMaxProyectos = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad maxima de proyectos simultaneos del desarrollador"));
         double tarifaDia = Double.parseDouble(JOptionPane.showInputDialog("Ingrese la tarifa diaria del desarrollador"));
-        String estado = JOptionPane.showInputDialog("Ingrese el estado del desarrollador" +
-                "\n Disponible, Asignado, Ocupado, En capacitación");
+        String estado = JOptionPane.showInputDialog("Ingrese el estado del desarrollador" + "\n Disponible, Asignado, Ocupado, En capacitación");
 
         return new Desarrollador(id, nombreCompleto, equipoTrabajo, nivel, cantMaxProyectos, tarifaDia, estado);
     }
@@ -121,8 +119,7 @@ public class Empresa {
         String nombre = JOptionPane.showInputDialog("Ingrese el nombre del servicio: ");
         String descripcion = JOptionPane.showInputDialog("Ingrese la descripcion del servicio");
         double precio = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el precio del servicio"));
-        String disponibilidad = JOptionPane.showInputDialog("Ingrese la disponibilidad del servicio " +
-                "\n libre/ocupado");
+        String disponibilidad = JOptionPane.showInputDialog("Ingrese la disponibilidad del servicio " + "\n libre/ocupado");
 
         return new Servicio(codigo, nombre, descripcion, precio, disponibilidad);
     }
@@ -132,9 +129,13 @@ public class Empresa {
 
         LocalDate fechaInicio = null;
         LocalDate fechaFin = null;
+        LocalDate fechaSolicitud = null;
 
         String codigo = JOptionPane.showInputDialog("Ingrese el codigo del proyecto: ");
-        LocalDate fechaSolicitud = LocalDate.now(); // se toma del momento de la creacion del proyecto
+
+        String inputSolicitud = JOptionPane.showInputDialog("Ingrese la fecha de solicitud (dd/mm/aaaa): ");
+        if (inputSolicitud == null) return null;
+        fechaSolicitud = LocalDate.parse(inputSolicitud, formateador);
 
         //Fecha inicio
         String inputInicio = JOptionPane.showInputDialog("Ingrese la fecha de inicio (dd/mm/aaaa): ");
@@ -152,8 +153,7 @@ public class Empresa {
             fechaFin = null;
         }
 
-        String estado = JOptionPane.showInputDialog("Ingrese el estado del proyecto: " +
-                "\n Pendiente, Confirmado, En curso, Finalizado, Cancelado");
+        String estado = JOptionPane.showInputDialog("Ingrese el estado del proyecto: " + "\n Pendiente, Confirmado, En curso, Finalizado, Cancelado");
         String metodoPago = JOptionPane.showInputDialog("Ingrese el metodo de pago del proyecto");
         double valorTotal = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el valor base del proyecto"));
 
@@ -170,49 +170,37 @@ public class Empresa {
         DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         String codigo = proyectoActualizar.getCodigo();
-        LocalDate fechaSolicitud = proyectoActualizar.getFechaSolicitud();
 
         LocalDate fechaInicio = null;
         LocalDate fechaFin = null;
+        LocalDate fechaSolicitud = null;
 
         String fechaInicioActualTexto = proyectoActualizar.getFechaInicio().format(formateador);
         String fechaFinActualTexto = proyectoActualizar.getFechaFin().format(formateador);
+        String fechaSolicitudActualTexto = proyectoActualizar.getFechaSolicitud().format(formateador);
 
-        while (fechaInicio == null) {
-            String inputInicio = (String) JOptionPane.showInputDialog(
-                    null, "Modifique la fecha de inicio:", "Actualizar Fecha Inicio",
-                    JOptionPane.QUESTION_MESSAGE, null, null, fechaInicioActualTexto
-            );
-            if (inputInicio == null) return null; // Cancelar operación
-            fechaInicio = LocalDate.parse(inputInicio, formateador);
+        String inputSolicitud = (String) JOptionPane.showInputDialog(null, "Modifique la fecha de solicitud:", "Actualizar Fecha solicitud", JOptionPane.QUESTION_MESSAGE, null, null, fechaSolicitudActualTexto);
+        if (inputSolicitud == null) return null;
+        fechaSolicitud = LocalDate.parse(inputSolicitud, formateador);
 
+        String inputInicio = (String) JOptionPane.showInputDialog(null, "Modifique la fecha de inicio:", "Actualizar Fecha Inicio", JOptionPane.QUESTION_MESSAGE, null, null, fechaInicioActualTexto);
+        if (inputInicio == null) return null;
+        fechaInicio = LocalDate.parse(inputInicio, formateador);
+
+        String inputFin = (String) JOptionPane.showInputDialog(null, "Modifique la fecha de fin:", "Actualizar Fecha Fin", JOptionPane.QUESTION_MESSAGE, null, null, fechaFinActualTexto);
+        if (inputFin == null) return null;
+        fechaFin = LocalDate.parse(inputFin, formateador);
+
+        // Validar que no sea anterior a la de inicio
+        if (fechaFin.isBefore(fechaInicio)) {
+            JOptionPane.showMessageDialog(null, "La fecha de fin no puede ser anterior a la fecha de inicio.", "Error", JOptionPane.ERROR_MESSAGE);
+            fechaFin = null;
         }
 
-        while (fechaFin == null) {
-            String inputFin = (String) JOptionPane.showInputDialog(
-                    null, "Modifique la fecha de fin:", "Actualizar Fecha Fin",
-                    JOptionPane.QUESTION_MESSAGE, null, null, fechaFinActualTexto
-            );
-            if (inputFin == null) return null;
-            fechaFin = LocalDate.parse(inputFin, formateador);
-
-            // Validar que no sea anterior a la de inicio
-            if (fechaFin.isBefore(fechaInicio)) {
-                JOptionPane.showMessageDialog(null, "La fecha de fin no puede ser anterior a la fecha de inicio.", "Error", JOptionPane.ERROR_MESSAGE);
-                fechaFin = null;
-            }
-        }
-
-        String estado = (String) JOptionPane.showInputDialog(
-                null, "Modifique el estado del proyecto:\n(Pendiente, Confirmado, En curso, Finalizado, Cancelado)",
-                "Actualizar Estado", JOptionPane.QUESTION_MESSAGE, null, null, proyectoActualizar.getEstado()
-        );
+        String estado = (String) JOptionPane.showInputDialog(null, "Modifique el estado del proyecto:\n(Pendiente, Confirmado, En curso, Finalizado, Cancelado)", "Actualizar Estado", JOptionPane.QUESTION_MESSAGE, null, null, proyectoActualizar.getEstado());
         if (estado == null) return null;
 
-        String metodoPago = (String) JOptionPane.showInputDialog(
-                null, "Modifique el método de pago del proyecto:",
-                "Actualizar Método de Pago", JOptionPane.QUESTION_MESSAGE, null, null, proyectoActualizar.getMetodoPago()
-        );
+        String metodoPago = (String) JOptionPane.showInputDialog(null, "Modifique el método de pago del proyecto:", "Actualizar Método de Pago", JOptionPane.QUESTION_MESSAGE, null, null, proyectoActualizar.getMetodoPago());
         if (metodoPago == null) return null;
 
         double valorTotal = 0;
@@ -220,10 +208,7 @@ public class Empresa {
         String valorActualTexto = String.valueOf(proyectoActualizar.getValorTotal()); // o getValorBase() según tu atributo
 
         while (!valorValido) {
-            String inputValor = (String) JOptionPane.showInputDialog(
-                    null, "Modifique el valor base del proyecto:",
-                    "Actualizar Valor Base", JOptionPane.QUESTION_MESSAGE, null, null, valorActualTexto
-            );
+            String inputValor = (String) JOptionPane.showInputDialog(null, "Modifique el valor base del proyecto:", "Actualizar Valor Base", JOptionPane.QUESTION_MESSAGE, null, null, valorActualTexto);
             if (inputValor == null) return null;
             valorTotal = Double.parseDouble(inputValor);
             valorValido = true;
@@ -242,6 +227,16 @@ public class Empresa {
 
     public String ingresarCodigoServicio() {
         return JOptionPane.showInputDialog("Ingrese el codigo del servicio");
+    }
+
+    public LocalDate ingresarFechaSolicitudIngresos() {
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate fechaSolicitudIngresos = null;
+
+        String inputInicio = JOptionPane.showInputDialog("Ingrese la fecha de solicitud de los proyectos a tener en cuenta para calcular ingresos (dd/mm/aaaa):");
+        fechaSolicitudIngresos = LocalDate.parse(inputInicio, formateador);
+
+        return fechaSolicitudIngresos;
     }
 
     // FUNCIONES DE REGISTRO Y ACTUALIZAR ----------
@@ -306,6 +301,7 @@ public class Empresa {
             }
 
             // Actualizamos los atributos con los nuevos datos
+            proyectoExistente.setFechaSolicitud(nuevoProyecto.getFechaSolicitud());
             proyectoExistente.setFechaInicio(nuevoProyecto.getFechaInicio());
             proyectoExistente.setFechaFin(nuevoProyecto.getFechaFin());
             proyectoExistente.setEstado(nuevoProyecto.getEstado());
@@ -407,15 +403,7 @@ public class Empresa {
         // comprobamos si el telefono es perfecto
         boolean esPerfecto = clienteEncontrado.esTelefonoPerfecto();
 
-        JOptionPane.showMessageDialog(null,
-                "Cliente Encontrado" +
-                        "\n ID: " + clienteEncontrado.getId() +
-                        "\n Nombre: " + clienteEncontrado.getNombreCompleto() +
-                        "\n Razon Social: " + clienteEncontrado.getRazonSocial() +
-                        "\n Telefono: " + clienteEncontrado.getTelefono() +
-                        "\n Correo: " + clienteEncontrado.getCorreo() +
-                        "\n Pais: " + clienteEncontrado.getPaisProcedencia() +
-                        "\n Es numero perfecto el telefono: " + esPerfecto);
+        JOptionPane.showMessageDialog(null, "Cliente Encontrado" + "\n ID: " + clienteEncontrado.getId() + "\n Nombre: " + clienteEncontrado.getNombreCompleto() + "\n Razon Social: " + clienteEncontrado.getRazonSocial() + "\n Telefono: " + clienteEncontrado.getTelefono() + "\n Correo: " + clienteEncontrado.getCorreo() + "\n Pais: " + clienteEncontrado.getPaisProcedencia() + "\n Es numero perfecto el telefono: " + esPerfecto);
     }
 
     public void imprimirResultadoConsultaProyecto(Proyecto proyectoEncontrado) {
@@ -424,19 +412,30 @@ public class Empresa {
         double valorAdicional = proyectoEncontrado.calcularValorAdicional();
         double valorTotal = valorBase + valorAdicional;
 
-        JOptionPane.showMessageDialog(null,
-                "Proyecto Encontrado" +
-                        "\n Codigo: " + proyectoEncontrado.getCodigo() +
-                        "\n Fecha de la Solicitud: " + proyectoEncontrado.getFechaSolicitud() +
-                        "\n Fecha de Inicio: " + proyectoEncontrado.getFechaInicio() +
-                        "\n Fecha de Fin: " + proyectoEncontrado.getFechaFin() +
-                        "\n Estado: " + proyectoEncontrado.getEstado() +
-                        "\n Metodo de Pago: " + proyectoEncontrado.getMetodoPago() +
-                        "\n Cantidad de Desarrolladores: " + proyectoEncontrado.obtenerCantidadDesarrolladores() +
-                        "\n Cantidad de Servicios: " + proyectoEncontrado.obtenerCantidadServicios() +
-                        "\n Valor Base: " + valorBase +
-                        "\n Valor Adicional por servicios: " + valorAdicional +
-                        "\n Valor Total: " + valorTotal);
+        JOptionPane.showMessageDialog(null, "Proyecto Encontrado" + "\n Codigo: " + proyectoEncontrado.getCodigo() + "\n Fecha de la Solicitud: " + proyectoEncontrado.getFechaSolicitud() + "\n Fecha de Inicio: " + proyectoEncontrado.getFechaInicio() + "\n Fecha de Fin: " + proyectoEncontrado.getFechaFin() + "\n Estado: " + proyectoEncontrado.getEstado() + "\n Metodo de Pago: " + proyectoEncontrado.getMetodoPago() + "\n Cantidad de Desarrolladores: " + proyectoEncontrado.obtenerCantidadDesarrolladores() + "\n Cantidad de Servicios: " + proyectoEncontrado.obtenerCantidadServicios() + "\n Valor Base: " + valorBase + "\n Valor Adicional por servicios: " + valorAdicional + "\n Valor Total: " + valorTotal);
+    }
+
+    //FUNCIONES DE CALCULO ----------
+
+    public double calcularIngresosEmpresa(LocalDate fechaSolicitudIngresos) {
+        double suma = 0.0;
+
+        for (int i = 0; i < listProyectos.length; i++) {
+            if (listProyectos[i] != null) {
+
+                LocalDate fechaSolicitudProyecto = listProyectos[i].getFechaSolicitud();
+
+                if (fechaSolicitudProyecto != null && fechaSolicitudProyecto.isEqual(fechaSolicitudIngresos)) {
+
+                    double valorBase = listProyectos[i].getValorTotal();
+                    double valorAdicional = listProyectos[i].calcularValorAdicional();
+                    double valorTotal = valorBase + valorAdicional;
+
+                    suma += valorTotal;
+                }
+            }
+        }
+        return suma;
     }
 
     //GETTERS Y SETTERS ----------
