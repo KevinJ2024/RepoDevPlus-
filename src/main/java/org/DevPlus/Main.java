@@ -126,8 +126,8 @@ public class Main {
                 }
                 break;
             case 2:
-                String codigoClienteConsultar = devPlus.ingresarCodigoProyecto();
-                Proyecto proyectoEncontrado = devPlus.consultarProyectoCodigo(codigoClienteConsultar);
+                String codigoProyectoConsultar = devPlus.ingresarCodigoProyecto();
+                Proyecto proyectoEncontrado = devPlus.consultarProyectoCodigo(codigoProyectoConsultar);
                 if (proyectoEncontrado != null) {
                     devPlus.imprimirResultadoConsultaProyecto(proyectoEncontrado);
                 } else {
