@@ -109,9 +109,8 @@ public class Main {
                         "\n 1. Registrar Proyecto" +
                         "\n 2. Consultar Proyecto" +
                         "\n 3. Actualizar Proyecto" +
-                        "\n 4. Eliminar Proyecto" +
-                        "\n 5. Añadir Desarrollador" +
-                        "\n 6. Añador Servicio" +
+                        "\n 4. Añadir Desarrollador" +
+                        "\n 5. Añador Servicio" +
                         "\n 0. Regresar"));
 
         switch (option) {
@@ -137,22 +136,30 @@ public class Main {
             case 3:
                 break;
             case 4:
-                break;
-            case 5:
                 String codigoProyectoDev = devPlus.ingresarCodigoProyecto();
                 Proyecto proyectoAnadirDev = devPlus.consultarProyectoCodigo(codigoProyectoDev);
 
                 String idDesarrollador = devPlus.ingresarIdDesarrollador();
                 Desarrollador desarrolladorEncontrado = devPlus.consultarDesarrolladorId(idDesarrollador);
-                proyectoAnadirDev.agregarDesarrollador(desarrolladorEncontrado);
+
+                if (proyectoAnadirDev.agregarDesarrollador(desarrolladorEncontrado)) {
+                    JOptionPane.showMessageDialog(null, "Se añadio correctamente el desarrollador al proyecto");
+                }else {
+                    JOptionPane.showMessageDialog(null, "No se pudo añadir al desarrollador al proyecto");
+                }
                 break;
-            case 6:
+            case 5:
                 String codigoProyectoServicio = devPlus.ingresarCodigoProyecto();
                 Proyecto proyectoAnadirServicio = devPlus.consultarProyectoCodigo(codigoProyectoServicio);
 
                 String codigoServicio = devPlus.ingresarCodigoServicio();
                 Servicio servicioEncontrado = devPlus.consultarServicioCodigo(codigoServicio);
-                proyectoAnadirServicio.agregarServicio(servicioEncontrado);
+
+                if (proyectoAnadirServicio.agregarServicio(servicioEncontrado)) {
+                    JOptionPane.showMessageDialog(null, "Se añadio correctamente el servicio al proyecto");
+                }else {
+                    JOptionPane.showMessageDialog(null, "No se pudo añadir el servicio al proyecto");
+                }
                 break;
             case 0:
                 break;

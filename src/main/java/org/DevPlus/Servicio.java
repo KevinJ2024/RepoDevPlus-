@@ -21,6 +21,17 @@ public class Servicio {
         listAsigServicios = new AsignacionServicio[10];
     }
 
+    public boolean nuevaAsignacion(AsignacionServicio nuevaAsignacion) {
+        if (nuevaAsignacion != null) {
+            for (int i = 0; i < listAsigServicios.length; i++) {
+                if (listAsigServicios[i] == null) {
+                    listAsigServicios[i] = nuevaAsignacion;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     //GETTERS Y SETTERS ----------
 
@@ -56,7 +67,7 @@ public class Servicio {
         this.precio = precio;
     }
 
-    public String isDisponibilidad() {
+    public String getDisponibilidad() {
         return disponibilidad;
     }
 

@@ -1,6 +1,7 @@
 package org.DevPlus;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class Proyecto {
     private String codigo;
@@ -56,16 +57,144 @@ public class Proyecto {
         return index;
     }
 
+    //Funcion para obtener el valor total adicional tomando en cuenta los servicios y desarrolladores asignados
     public double calcularValorAdicional() {
-        return 0.0;
+        double suma = 0.0;
+
+        for (int i = 0; i < listAsigServicio.length; i++) {
+            if (listAsigServicio[i] != null && listAsigServicio[i].getTheServicio() != null) {
+                suma += listAsigServicio[i].getTheServicio().getPrecio();
+            }
+        }
+
+        long diasProyecto = ChronoUnit.DAYS.between(this.fechaInicio, this.fechaFin) + 1;
+
+        for (int j = 0; j < listAsigDesarrollador.length; j++) {
+            if (listAsigDesarrollador[j] != null && listAsigDesarrollador[j].getTheDesarrollador() != null) {
+
+                double tarifaDiaria = listAsigDesarrollador[j].getTheDesarrollador().getTarifaDia();
+
+                double pagoDesarrollador = diasProyecto * tarifaDiaria;
+
+                suma += pagoDesarrollador;
+            }
+        }
+
+        return suma;
     }
 
-    public void agregarDesarrollador(Desarrollador nuevoDev) {
+    public boolean agregarDesarrollador(Desarrollador nuevoDev) {
+        boolean estaAnadido = false;
+        boolean seAnadioNuevo = false;
 
+        // validacion de estado, cantidad proyectos y de fechas para asignar un desarrollador
+        if (!nuevoDev.validarDisponibilidad(this.fechaInicio, this.fechaFin)){
+            return false;
+        }
+
+        //Validacion de no existir el desarrollador en la lista actual de desarrolladores del proyecto
+        if (nuevoDev != null){
+            for (int i = 0; i < listAsigDesarrollador.length; i++){
+                if (listAsigDesarrollador[i] != null){
+                    if(listAsigDesarrollador[i].getTheDesarrollador().getId().equals(nuevoDev.getId())){
+                        estaAnadido = true;
+                    }
+                }
+            }
+
+            //Si no esta añadido se añade
+            if (!estaAnadido){
+                seAnadioNuevo = crearAsignacionDev(nuevoDev);
+            }
+        }
+        return seAnadioNuevo;
     }
 
-    public void agregarServicio(Servicio nuevoServicio) {
+    public boolean crearAsignacionDev(Desarrollador nuevoDev){
+        for (int i = 0; i < listAsigDesarrollador.length; i++){
+            if (listAsigDesarrollador[i] == null){
+                int nuevoCodigo = 1;
+                if (i > 0){
+                    nuevoCodigo = Integer.parseInt(listAsigDesarrollador[i-1].getCodigoAsignacionDev()) + 1;
+                }
 
+                AsignacionDesarrollador nuevaAsig = new AsignacionDesarrollador(String.valueOf(nuevoCodigo), LocalDate.now());
+                nuevaAsig.setTheDesarrollador(nuevoDev);
+                nuevaAsig.setTheProyecto(this);
+
+                listAsigDesarrollador[i] = nuevaAsig;
+                nuevoDev.nuevaAsignacion(nuevaAsig);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean agregarServicio(Servicio nuevoServicio) {
+        boolean estaAnadido = false;
+        boolean seAnadioNuevo = false;
+
+        //Validar que el desarrollador este libre
+        if (nuevoServicio.getDisponibilidad().equals("Ocupado")){
+            return false;
+        }
+
+        //Validacion de no existir el desarrollador en la lista actual de desarrolladores del proyecto
+        if (nuevoServicio != null){
+            for (int i = 0; i < listAsigServicio.length; i++){
+                if (listAsigServicio[i] != null){
+                    if(listAsigServicio[i].getTheServicio().getCodigo().equals(nuevoServicio.getCodigo())){
+                        estaAnadido = true;
+                    }
+                }
+            }
+
+            //Si no esta añadido se añade
+            if (!estaAnadido){
+                seAnadioNuevo = crearAsignacionServicio(nuevoServicio);
+            }
+        }
+        return seAnadioNuevo;
+    }
+
+    public boolean crearAsignacionServicio(Servicio nuevoServicio){
+        for (int i = 0; i < listAsigServicio.length; i++){
+            if (listAsigServicio[i] == null){
+                int nuevoCodigo = 1;
+                if (i > 0){
+                    nuevoCodigo = Integer.parseInt(listAsigServicio[i-1].getCodigoAsignacionServicio()) + 1;
+                }
+
+                AsignacionServicio nuevaAsig = new AsignacionServicio(String.valueOf(nuevoCodigo), LocalDate.now());
+                nuevaAsig.setTheServicio(nuevoServicio);
+                nuevaAsig.setTheProyecto(this);
+
+                listAsigServicio[i] = nuevaAsig;
+                nuevoServicio.nuevaAsignacion(nuevaAsig);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int obtenerCantidadDesarrolladores(){
+        int contador = 0;
+        for (int i = 0; i < listAsigDesarrollador.length; i++){
+            if(listAsigDesarrollador[i] != null){
+                contador += 1;
+            }
+        }
+        return contador;
+    }
+
+    public int obtenerCantidadServicios(){
+        int contador = 0;
+        for (int i = 0; i < listAsigServicio.length; i++){
+            if(listAsigServicio[i] != null){
+                contador += 1;
+            }
+        }
+        return contador;
     }
 
     //GETTERS Y SETTERS ----------

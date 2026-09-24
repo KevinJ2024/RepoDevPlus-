@@ -105,13 +105,14 @@ public class Empresa {
         String id = JOptionPane.showInputDialog("Ingrese el ID del desarrollador: ");
         String nombreCompleto = JOptionPane.showInputDialog("Ingrese el nombre completo del desarrollador: ");
         String equipoTrabajo = JOptionPane.showInputDialog("Ingrese el equipo de trabajo del desarrollador");
-        String nivel = JOptionPane.showInputDialog("Ingrese el nivel del desarrollador");
+        String nivel = JOptionPane.showInputDialog("Ingrese el nivel del desarrollador" +
+                "\n Junior, Semisenior, Senior");
         int cantMaxProyectos = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad maxima de proyectos simultaneos del desarrollador"));
         double tarifaDia = Double.parseDouble(JOptionPane.showInputDialog("Ingrese la tarifa diaria del desarrollador"));
-        String estado = JOptionPane.showInputDialog("Ingrese el estado del desarrollador");
-        String disponibilidad = JOptionPane.showInputDialog("Ingrese la disponibilidad del servicio libre/ocupado");
+        String estado = JOptionPane.showInputDialog("Ingrese el estado del desarrollador" +
+                "\n Disponible, Asignado, Ocupado, En capacitación");
 
-        return new Desarrollador(id, nombreCompleto, equipoTrabajo, nivel, cantMaxProyectos, tarifaDia, estado, disponibilidad);
+        return new Desarrollador(id, nombreCompleto, equipoTrabajo, nivel, cantMaxProyectos, tarifaDia, estado);
     }
 
     public Servicio ingresarDatosRegistroServicio() {
@@ -119,7 +120,8 @@ public class Empresa {
         String nombre = JOptionPane.showInputDialog("Ingrese el nombre del servicio: ");
         String descripcion = JOptionPane.showInputDialog("Ingrese la descripcion del servicio");
         double precio = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el precio del servicio"));
-        String disponibilidad = JOptionPane.showInputDialog("Ingrese la disponibilidad del servicio libre/ocupado");
+        String disponibilidad = JOptionPane.showInputDialog("Ingrese la disponibilidad del servicio " +
+                "\n libre/ocupado");
 
         return new Servicio(codigo, nombre, descripcion, precio, disponibilidad);
     }
@@ -149,7 +151,8 @@ public class Empresa {
             fechaFin = null;
         }
 
-        String estado = JOptionPane.showInputDialog("Ingrese el estado del proyecto: ");
+        String estado = JOptionPane.showInputDialog("Ingrese el estado del proyecto: " +
+                "\n Pendiente, Confirmado, En curso, Finalizado, Cancelado");
         String metodoPago = JOptionPane.showInputDialog("Ingrese el metodo de pago del proyecto");
         double valorTotal = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el valor base del proyecto"));
 
@@ -239,7 +242,7 @@ public class Empresa {
         if (!id.isEmpty()) {
             for (int i = 0; i < listDesarrolladores.length; i++) {
                 if (listDesarrolladores[i] != null) {
-                    if (listDesarrolladores[i].getId() == id) {
+                    if (listDesarrolladores[i].getId().equals(id)) {
                         desarrolladorEncontrado = listDesarrolladores[i];
                     }
                 }
@@ -253,7 +256,7 @@ public class Empresa {
         if (!codigo.isEmpty()) {
             for (int i = 0; i < listServicios.length; i++) {
                 if (listServicios[i] != null) {
-                    if (listServicios[i].getCodigo() == codigo) {
+                    if (listServicios[i].getCodigo().equals(codigo)) {
                         servicioEncontrado = listServicios[i];
                     }
                 }
@@ -307,6 +310,8 @@ public class Empresa {
                         "\n Fecha de Fin: " + proyectoEncontrado.getFechaFin() +
                         "\n Estado: " + proyectoEncontrado.getEstado() +
                         "\n Metodo de Pago: " + proyectoEncontrado.getMetodoPago() +
+                        "\n Cantidad de Desarrolladores: " + proyectoEncontrado.obtenerCantidadDesarrolladores() +
+                        "\n Cantidad de Servicios: " + proyectoEncontrado.obtenerCantidadServicios() +
                         "\n Valor Base: " + valorBase +
                         "\n Valor Adicional por servicios: " + valorAdicional +
                         "\n Valor Total: " + valorTotal);

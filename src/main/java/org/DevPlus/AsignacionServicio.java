@@ -6,13 +6,13 @@ public class AsignacionServicio {
 
     private String codigoAsignacionServicio;
     private LocalDate fechaAsignacion;
-    private Desarrollador theDesarrollador;
+    private Servicio theServicio;
     private Proyecto theProyecto;
 
     public AsignacionServicio(String codigoAsignacionServicio, LocalDate fechaAsignacion) {
         this.codigoAsignacionServicio = codigoAsignacionServicio;
         this.fechaAsignacion = fechaAsignacion;
-        theDesarrollador = null;
+        theServicio = null;
         theProyecto = null;
     }
 
@@ -34,12 +34,12 @@ public class AsignacionServicio {
         this.fechaAsignacion = fechaAsignacion;
     }
 
-    public Desarrollador getTheDesarrollador() {
-        return theDesarrollador;
+    public Servicio getTheServicio() {
+        return theServicio;
     }
 
-    public void setTheDesarrollador(Desarrollador theDesarrollador) {
-        this.theDesarrollador = theDesarrollador;
+    public void setTheServicio(Servicio theServicio) {
+        this.theServicio = theServicio;
     }
 
     public Proyecto getTheProyecto() {
