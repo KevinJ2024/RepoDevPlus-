@@ -1,6 +1,9 @@
 package org.DevPlus;
 
 import javax.swing.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class Empresa {
 
@@ -39,7 +42,6 @@ public class Empresa {
                 }
             }
         }
-
         return index;
     }
 
@@ -53,7 +55,6 @@ public class Empresa {
                 }
             }
         }
-
         return index;
     }
 
@@ -67,7 +68,19 @@ public class Empresa {
                 }
             }
         }
+        return index;
+    }
 
+    public int encontrarIndexProyecto(String codigoProyecto) {
+        int index = -1;
+
+        for (int i = 0; i < listProyectos.length; i++) {
+            if (listProyectos[i] != null) {
+                if (listProyectos[i].getCodigo().equals(codigoProyecto)) {
+                    index = i;
+                }
+            }
+        }
         return index;
     }
 
@@ -85,7 +98,6 @@ public class Empresa {
     }
 
     public long ingresarTelefonoCliente() {
-
         return Long.parseLong(JOptionPane.showInputDialog("Ingrese el telefono del cliente a consultar"));
     }
 
@@ -110,6 +122,50 @@ public class Empresa {
         String disponibilidad = JOptionPane.showInputDialog("Ingrese la disponibilidad del servicio libre/ocupado");
 
         return new Servicio(codigo, nombre, descripcion, precio, disponibilidad);
+    }
+
+    public Proyecto ingresarDatosRegistroProyecto() {
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        LocalDate fechaInicio = null;
+        LocalDate fechaFin = null;
+
+        String codigo = JOptionPane.showInputDialog("Ingrese el codigo del proyecto: ");
+        LocalDate fechaSolicitud = LocalDate.now(); // se toma del momento de la creacion del proyecto
+
+        //Fecha inicio
+        String inputInicio = JOptionPane.showInputDialog("Ingrese la fecha de inicio (dd/mm/aaaa): ");
+        if (inputInicio == null) return null;
+        fechaInicio = LocalDate.parse(inputInicio, formateador);
+
+        //Fecha fin
+        String inputFin = JOptionPane.showInputDialog("Ingrese la fecha de fin (dd/mm/aaaa):");
+        if (inputFin == null) return null;
+        fechaFin = LocalDate.parse(inputFin, formateador);
+
+        // validar que no sea antes que la de inicio
+        if (fechaFin.isBefore(fechaInicio)) {
+            JOptionPane.showMessageDialog(null, "La fecha de fin no puede ser anterior a la fecha de inicio.");
+            fechaFin = null;
+        }
+
+        String estado = JOptionPane.showInputDialog("Ingrese el estado del proyecto: ");
+        String metodoPago = JOptionPane.showInputDialog("Ingrese el metodo de pago del proyecto");
+        double valorTotal = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el valor base del proyecto"));
+
+        return new Proyecto(codigo, fechaSolicitud, fechaInicio, fechaFin, estado, metodoPago, valorTotal);
+    }
+
+    public String ingresarCodigoProyecto() {
+        return JOptionPane.showInputDialog("Ingrese el codigo del proyecto");
+    }
+
+    public String ingresarIdDesarrollador() {
+        return JOptionPane.showInputDialog("Ingrese el ID del desarrollador");
+    }
+
+    public String ingresarCodigoServicio() {
+        return JOptionPane.showInputDialog("Ingrese el codigo del servicio");
     }
 
     // FUNCIONES DE REGISTRO ----------
@@ -150,7 +206,20 @@ public class Empresa {
         return false;
     }
 
+    public boolean registrarProyecto(Proyecto nuevoProyecto) {
+        if (encontrarIndexProyecto(nuevoProyecto.getCodigo()) == -1) {
+            for (int i = 0; i < listProyectos.length; i++) {
+                if (listProyectos[i] == null) {
+                    listProyectos[i] = nuevoProyecto;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     //FUNCIONES DE CONSULTA ----------
+
     public Cliente consultarClienteTelefono(long telefono) {
         Cliente clienteEncontrado = null;
         if (telefono >= 0) {
@@ -162,9 +231,52 @@ public class Empresa {
                 }
             }
         }
-
         return clienteEncontrado;
     }
+
+    public Desarrollador consultarDesarrolladorId(String id) {
+        Desarrollador desarrolladorEncontrado = null;
+        if (!id.isEmpty()) {
+            for (int i = 0; i < listDesarrolladores.length; i++) {
+                if (listDesarrolladores[i] != null) {
+                    if (listDesarrolladores[i].getId() == id) {
+                        desarrolladorEncontrado = listDesarrolladores[i];
+                    }
+                }
+            }
+        }
+        return desarrolladorEncontrado;
+    }
+
+    public Servicio consultarServicioCodigo(String codigo) {
+        Servicio servicioEncontrado = null;
+        if (!codigo.isEmpty()) {
+            for (int i = 0; i < listServicios.length; i++) {
+                if (listServicios[i] != null) {
+                    if (listServicios[i].getCodigo() == codigo) {
+                        servicioEncontrado = listServicios[i];
+                    }
+                }
+            }
+        }
+        return servicioEncontrado;
+    }
+
+    public Proyecto consultarProyectoCodigo(String codigo) {
+        Proyecto proyectoEncontrado = null;
+        if (!codigo.isEmpty()) {
+            for (int i = 0; i < listProyectos.length; i++) {
+                if (listProyectos[i] != null) {
+                    if (listProyectos[i].getCodigo().equals(codigo)) {
+                        proyectoEncontrado = listProyectos[i];
+                    }
+                }
+            }
+        }
+        return proyectoEncontrado;
+    }
+
+    //FUNCIONES DE IMPRESION ----------
 
     public void imprimirResultadoConsultaCliente(Cliente clienteEncontrado) {
         // comprobamos si el telefono es perfecto
@@ -179,6 +291,25 @@ public class Empresa {
                         "\n Correo: " + clienteEncontrado.getCorreo() +
                         "\n Pais: " + clienteEncontrado.getPaisProcedencia() +
                         "\n Es numero perfecto el telefono: " + esPerfecto);
+    }
+
+    public void imprimirResultadoConsultaProyecto(Proyecto proyectoEncontrado) {
+
+        double valorBase = proyectoEncontrado.getValorTotal();
+        double valorAdicional = proyectoEncontrado.calcularValorAdicional();
+        double valorTotal = valorBase + valorAdicional;
+
+        JOptionPane.showMessageDialog(null,
+                "Proyecto Encontrado" +
+                        "\n Codigo: " + proyectoEncontrado.getCodigo() +
+                        "\n Fecha de la Solicitud: " + proyectoEncontrado.getFechaSolicitud() +
+                        "\n Fecha de Inicio: " + proyectoEncontrado.getFechaInicio() +
+                        "\n Fecha de Fin: " + proyectoEncontrado.getFechaFin() +
+                        "\n Estado: " + proyectoEncontrado.getEstado() +
+                        "\n Metodo de Pago: " + proyectoEncontrado.getMetodoPago() +
+                        "\n Valor Base: " + valorBase +
+                        "\n Valor Adicional por servicios: " + valorAdicional +
+                        "\n Valor Total: " + valorTotal);
     }
 
     //GETTERS Y SETTERS ----------

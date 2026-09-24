@@ -30,7 +30,33 @@ public class Proyecto {
         listAsigDesarrollador = new AsignacionDesarrollador[10];
     }
 
-    public double calcularValorTotal() {
+    public int encontrarIndexListAsigDev(String codigoAsignacionDev) {
+        int index = -1;
+
+        for (int i = 0; i < listAsigDesarrollador.length; i++) {
+            if (listAsigDesarrollador[i] != null) {
+                if (listAsigDesarrollador[i].getCodigoAsignacionDev().equals(codigoAsignacionDev)) {
+                    index = i;
+                }
+            }
+        }
+        return index;
+    }
+
+    public int encontrarIndexListAsigServicio(String codigoAsignacionServicio) {
+        int index = -1;
+
+        for (int i = 0; i < listAsigServicio.length; i++) {
+            if (listAsigServicio[i] != null) {
+                if (listAsigServicio[i].getCodigoAsignacionServicio().equals(codigoAsignacionServicio)) {
+                    index = i;
+                }
+            }
+        }
+        return index;
+    }
+
+    public double calcularValorAdicional() {
         return 0.0;
     }
 

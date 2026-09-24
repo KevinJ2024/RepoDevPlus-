@@ -4,11 +4,13 @@ import java.time.LocalDate;
 
 public class AsignacionDesarrollador {
 
+    private String codigoAsignacionDev;
     private LocalDate fechaAsignacion;
     private Servicio theServicio;
     private Proyecto theProyecto;
 
-    public AsignacionDesarrollador(LocalDate fechaAsignacion) {
+    public AsignacionDesarrollador(String codigoAsignacionDev, LocalDate fechaAsignacion) {
+        this.codigoAsignacionDev = codigoAsignacionDev;
         this.fechaAsignacion = fechaAsignacion;
         theServicio = null;
         theProyecto = null;
@@ -16,6 +18,14 @@ public class AsignacionDesarrollador {
 
 
     //GETTERS Y SETTERS ----------
+
+    public String getCodigoAsignacionDev() {
+        return codigoAsignacionDev;
+    }
+
+    public void setCodigoAsignacionDev(String codigoAsignacionDev) {
+        this.codigoAsignacionDev = codigoAsignacionDev;
+    }
 
     public LocalDate getFechaAsignacion() {
         return fechaAsignacion;

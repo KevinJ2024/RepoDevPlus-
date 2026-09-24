@@ -57,7 +57,7 @@ public class Main {
                 Cliente datos = devPlus.ingresarDatosRegistroCliente();
                 boolean res = devPlus.registrarCliente(datos);
 
-                if (res == true) {
+                if (res) {
                     JOptionPane.showMessageDialog(null, "Se registro exitosamente el cliente");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo guardar el cliente");
@@ -90,7 +90,7 @@ public class Main {
                 Desarrollador datos = devPlus.ingresarDatosRegistroDesarrollador();
                 boolean res = devPlus.registrarDesarrollador(datos);
 
-                if (res == true) {
+                if (res) {
                     JOptionPane.showMessageDialog(null, "Se registro exitosamente el desarrollador");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo guardar el desarrollador");
@@ -110,16 +110,49 @@ public class Main {
                         "\n 2. Consultar Proyecto" +
                         "\n 3. Actualizar Proyecto" +
                         "\n 4. Eliminar Proyecto" +
+                        "\n 5. Añadir Desarrollador" +
+                        "\n 6. Añador Servicio" +
                         "\n 0. Regresar"));
 
         switch (option) {
             case 1:
+                Proyecto datos = devPlus.ingresarDatosRegistroProyecto();
+                boolean res = devPlus.registrarProyecto(datos);
+
+                if (res) {
+                    JOptionPane.showMessageDialog(null, "Se registro exitosamente el proyecto");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo guardar el proyecto");
+                }
                 break;
             case 2:
+                String codigoConsultado = devPlus.ingresarCodigoProyecto();
+                Proyecto proyectoEncontrado = devPlus.consultarProyectoCodigo(codigoConsultado);
+                if (proyectoEncontrado != null) {
+                    devPlus.imprimirResultadoConsultaProyecto(proyectoEncontrado);
+                } else {
+                    JOptionPane.showMessageDialog(null, "El proyecto no existe o no pudo ser encontrado");
+                }
                 break;
             case 3:
                 break;
             case 4:
+                break;
+            case 5:
+                String codigoProyectoDev = devPlus.ingresarCodigoProyecto();
+                Proyecto proyectoAnadirDev = devPlus.consultarProyectoCodigo(codigoProyectoDev);
+
+                String idDesarrollador = devPlus.ingresarIdDesarrollador();
+                Desarrollador desarrolladorEncontrado = devPlus.consultarDesarrolladorId(idDesarrollador);
+                proyectoAnadirDev.agregarDesarrollador(desarrolladorEncontrado);
+                break;
+            case 6:
+                String codigoProyectoServicio = devPlus.ingresarCodigoProyecto();
+                Proyecto proyectoAnadirServicio = devPlus.consultarProyectoCodigo(codigoProyectoServicio);
+
+                String codigoServicio = devPlus.ingresarCodigoServicio();
+                Servicio servicioEncontrado = devPlus.consultarServicioCodigo(codigoServicio);
+                proyectoAnadirServicio.agregarServicio(servicioEncontrado);
                 break;
             case 0:
                 break;
@@ -139,7 +172,7 @@ public class Main {
                 Servicio datos = devPlus.ingresarDatosRegistroServicio();
                 boolean res = devPlus.registrarServicio(datos);
 
-                if (res == true) {
+                if (res) {
                     JOptionPane.showMessageDialog(null, "Se registro exitosamente el servicio");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo guardar el servicio");
