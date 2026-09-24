@@ -3,6 +3,7 @@ package org.DevPlus;
 import javax.swing.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 public class Empresa {
@@ -159,6 +160,78 @@ public class Empresa {
         return new Proyecto(codigo, fechaSolicitud, fechaInicio, fechaFin, estado, metodoPago, valorTotal);
     }
 
+    //Funcion para pedir datos para actualizar al mismo tiempo que se muestran los anteriores
+    public Proyecto ingresarDatosActualizarProyecto(Proyecto proyectoActualizar) {
+        if (proyectoActualizar == null) {
+            JOptionPane.showMessageDialog(null, "No se proporcionó un proyecto para actualizar.", "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        String codigo = proyectoActualizar.getCodigo();
+        LocalDate fechaSolicitud = proyectoActualizar.getFechaSolicitud();
+
+        LocalDate fechaInicio = null;
+        LocalDate fechaFin = null;
+
+        String fechaInicioActualTexto = proyectoActualizar.getFechaInicio().format(formateador);
+        String fechaFinActualTexto = proyectoActualizar.getFechaFin().format(formateador);
+
+        while (fechaInicio == null) {
+            String inputInicio = (String) JOptionPane.showInputDialog(
+                    null, "Modifique la fecha de inicio:", "Actualizar Fecha Inicio",
+                    JOptionPane.QUESTION_MESSAGE, null, null, fechaInicioActualTexto
+            );
+            if (inputInicio == null) return null; // Cancelar operación
+            fechaInicio = LocalDate.parse(inputInicio, formateador);
+
+        }
+
+        while (fechaFin == null) {
+            String inputFin = (String) JOptionPane.showInputDialog(
+                    null, "Modifique la fecha de fin:", "Actualizar Fecha Fin",
+                    JOptionPane.QUESTION_MESSAGE, null, null, fechaFinActualTexto
+            );
+            if (inputFin == null) return null;
+            fechaFin = LocalDate.parse(inputFin, formateador);
+
+            // Validar que no sea anterior a la de inicio
+            if (fechaFin.isBefore(fechaInicio)) {
+                JOptionPane.showMessageDialog(null, "La fecha de fin no puede ser anterior a la fecha de inicio.", "Error", JOptionPane.ERROR_MESSAGE);
+                fechaFin = null;
+            }
+        }
+
+        String estado = (String) JOptionPane.showInputDialog(
+                null, "Modifique el estado del proyecto:\n(Pendiente, Confirmado, En curso, Finalizado, Cancelado)",
+                "Actualizar Estado", JOptionPane.QUESTION_MESSAGE, null, null, proyectoActualizar.getEstado()
+        );
+        if (estado == null) return null;
+
+        String metodoPago = (String) JOptionPane.showInputDialog(
+                null, "Modifique el método de pago del proyecto:",
+                "Actualizar Método de Pago", JOptionPane.QUESTION_MESSAGE, null, null, proyectoActualizar.getMetodoPago()
+        );
+        if (metodoPago == null) return null;
+
+        double valorTotal = 0;
+        boolean valorValido = false;
+        String valorActualTexto = String.valueOf(proyectoActualizar.getValorTotal()); // o getValorBase() según tu atributo
+
+        while (!valorValido) {
+            String inputValor = (String) JOptionPane.showInputDialog(
+                    null, "Modifique el valor base del proyecto:",
+                    "Actualizar Valor Base", JOptionPane.QUESTION_MESSAGE, null, null, valorActualTexto
+            );
+            if (inputValor == null) return null;
+            valorTotal = Double.parseDouble(inputValor);
+            valorValido = true;
+        }
+
+        return new Proyecto(codigo, fechaSolicitud, fechaInicio, fechaFin, estado, metodoPago, valorTotal);
+    }
+
     public String ingresarCodigoProyecto() {
         return JOptionPane.showInputDialog("Ingrese el codigo del proyecto");
     }
@@ -171,7 +244,7 @@ public class Empresa {
         return JOptionPane.showInputDialog("Ingrese el codigo del servicio");
     }
 
-    // FUNCIONES DE REGISTRO ----------
+    // FUNCIONES DE REGISTRO Y ACTUALIZAR ----------
 
     public boolean registrarCliente(Cliente nuevoCliente) {
         if (encontrarIndexCliente(nuevoCliente.getId()) == -1) {
@@ -219,6 +292,55 @@ public class Empresa {
             }
         }
         return false;
+    }
+
+    public boolean actualizarProyecto(String codigoProyectoActualizar, Proyecto nuevoProyecto) {
+        int index = encontrarIndexProyecto(codigoProyectoActualizar);
+
+        if (index != -1 && nuevoProyecto != null) {
+            Proyecto proyectoExistente = listProyectos[index];
+
+            // Si el estado cambia a "Confirmado", llamamos a la función auxiliar
+            if (nuevoProyecto.getEstado().equals("Confirmado")) {
+                desvincularYLimpiarDesarrolladores(proyectoExistente);
+            }
+
+            // Actualizamos los atributos con los nuevos datos
+            proyectoExistente.setFechaInicio(nuevoProyecto.getFechaInicio());
+            proyectoExistente.setFechaFin(nuevoProyecto.getFechaFin());
+            proyectoExistente.setEstado(nuevoProyecto.getEstado());
+            proyectoExistente.setMetodoPago(nuevoProyecto.getMetodoPago());
+            proyectoExistente.setValorTotal(nuevoProyecto.getValorTotal());
+
+            return true;
+        }
+        return false;
+    }
+
+    /*Funcion para limpiar tabla de desarrolladores del proyecto y asi mismo
+     eliminar el proyecto de la tabla de proyectos del desarrollador*/
+    private void desvincularYLimpiarDesarrolladores(Proyecto proyecto) {
+        AsignacionDesarrollador[] asignaciones = proyecto.getListAsigDesarrollador();
+
+        if (asignaciones == null) return;
+
+        for (int i = 0; i < asignaciones.length; i++) {
+            AsignacionDesarrollador asig = asignaciones[i];
+
+            if (asig != null && asig.getTheDesarrollador() != null) {
+                Desarrollador dev = asig.getTheDesarrollador();
+
+                dev.removerAsignacion(asig);
+
+                if (dev.obtenerCantidadProyectosActuales() == 0) {
+                    dev.setEstado("Disponible");
+                }
+
+                asig.setTheDesarrollador(null);
+            }
+
+            asignaciones[i] = null;
+        }
     }
 
     //FUNCIONES DE CONSULTA ----------

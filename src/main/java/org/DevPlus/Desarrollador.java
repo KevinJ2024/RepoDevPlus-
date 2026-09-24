@@ -66,6 +66,17 @@ public class Desarrollador {
         return false;
     }
 
+    public boolean removerAsignacion(AsignacionDesarrollador asigARemover) {
+        if (asigARemover == null) return false;
+        for (int i = 0; i < this.listAsigDesarrolladores.length; i++) {
+            if (this.listAsigDesarrolladores[i] == asigARemover) {
+                this.listAsigDesarrolladores[i] = null;
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean nuevaAsignacion(AsignacionDesarrollador nuevaAsignacion) {
         if (nuevaAsignacion != null) {
             for (int i = 0; i < listAsigDesarrolladores.length; i++) {
@@ -80,13 +91,13 @@ public class Desarrollador {
     }
 
     public int obtenerCantidadProyectosActuales() {
-        int cantidad = 0;
+        int contador = 0;
         for (int i = 0; i < listAsigDesarrolladores.length; i++) {
             if (listAsigDesarrolladores[i] != null) {
-                cantidad += 1;
+                contador++;
             }
         }
-        return cantidad;
+        return contador;
     }
 
     //GETTERS Y SETTERS ----------

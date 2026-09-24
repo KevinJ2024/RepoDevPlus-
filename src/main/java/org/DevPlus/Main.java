@@ -115,8 +115,8 @@ public class Main {
 
         switch (option) {
             case 1:
-                Proyecto datos = devPlus.ingresarDatosRegistroProyecto();
-                boolean res = devPlus.registrarProyecto(datos);
+                Proyecto datosRegistrar = devPlus.ingresarDatosRegistroProyecto();
+                boolean res = devPlus.registrarProyecto(datosRegistrar);
 
                 if (res) {
                     JOptionPane.showMessageDialog(null, "Se registro exitosamente el proyecto");
@@ -125,8 +125,8 @@ public class Main {
                 }
                 break;
             case 2:
-                String codigoConsultado = devPlus.ingresarCodigoProyecto();
-                Proyecto proyectoEncontrado = devPlus.consultarProyectoCodigo(codigoConsultado);
+                String codigoClienteConsultar = devPlus.ingresarCodigoProyecto();
+                Proyecto proyectoEncontrado = devPlus.consultarProyectoCodigo(codigoClienteConsultar);
                 if (proyectoEncontrado != null) {
                     devPlus.imprimirResultadoConsultaProyecto(proyectoEncontrado);
                 } else {
@@ -134,15 +134,22 @@ public class Main {
                 }
                 break;
             case 3:
+                String codigoProyectoActualizar = devPlus.ingresarCodigoProyecto();
+                Proyecto proyectoActualizar = devPlus.consultarProyectoCodigo(codigoProyectoActualizar);
+                Proyecto datosActualizar = devPlus.ingresarDatosActualizarProyecto(proyectoActualizar);
+
+                if(devPlus.actualizarProyecto(codigoProyectoActualizar, datosActualizar)){
+
+                }
                 break;
             case 4:
                 String codigoProyectoDev = devPlus.ingresarCodigoProyecto();
                 Proyecto proyectoAnadirDev = devPlus.consultarProyectoCodigo(codigoProyectoDev);
 
-                String idDesarrollador = devPlus.ingresarIdDesarrollador();
-                Desarrollador desarrolladorEncontrado = devPlus.consultarDesarrolladorId(idDesarrollador);
+                String idDesarrolladorAnadir = devPlus.ingresarIdDesarrollador();
+                Desarrollador desarrolladorEncontradoAnadir = devPlus.consultarDesarrolladorId(idDesarrolladorAnadir);
 
-                if (proyectoAnadirDev.agregarDesarrollador(desarrolladorEncontrado)) {
+                if (proyectoAnadirDev.agregarDesarrollador(desarrolladorEncontradoAnadir)) {
                     JOptionPane.showMessageDialog(null, "Se añadio correctamente el desarrollador al proyecto");
                 }else {
                     JOptionPane.showMessageDialog(null, "No se pudo añadir al desarrollador al proyecto");
@@ -152,10 +159,10 @@ public class Main {
                 String codigoProyectoServicio = devPlus.ingresarCodigoProyecto();
                 Proyecto proyectoAnadirServicio = devPlus.consultarProyectoCodigo(codigoProyectoServicio);
 
-                String codigoServicio = devPlus.ingresarCodigoServicio();
-                Servicio servicioEncontrado = devPlus.consultarServicioCodigo(codigoServicio);
+                String codigoServicioAnadir = devPlus.ingresarCodigoServicio();
+                Servicio servicioEncontradoAnadir = devPlus.consultarServicioCodigo(codigoServicioAnadir);
 
-                if (proyectoAnadirServicio.agregarServicio(servicioEncontrado)) {
+                if (proyectoAnadirServicio.agregarServicio(servicioEncontradoAnadir)) {
                     JOptionPane.showMessageDialog(null, "Se añadio correctamente el servicio al proyecto");
                 }else {
                     JOptionPane.showMessageDialog(null, "No se pudo añadir el servicio al proyecto");
